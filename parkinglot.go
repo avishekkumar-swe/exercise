@@ -3,6 +3,7 @@ package parkinglot
 import "errors"
 
 type vehicleId string
+
 type Vehicle struct {
 	id vehicleId
 }
@@ -36,13 +37,13 @@ func (p *ParkingArea) ParkIn(id string) error {
 	if p.isAlreadyPresent(id) {
 		return errors.New("vehicle already parked")
 	}
+	if p.totalSlots == len(p.vehicles)+1 {
+		p.notifyFullSlots()
+	}
 	if p.totalSlots > len(p.vehicles) {
 		vehicle := NewVehicle(id)
 		p.vehicles = append(p.vehicles, vehicle)
 		return nil
-	}
-	if p.totalSlots == len(p.vehicles) {
-		p.notifyFullSlots()
 	}
 	return errors.New("parking area is full")
 }
