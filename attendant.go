@@ -6,12 +6,17 @@ type ParkingLots map[*ParkingArea]bool
 
 type Attendant struct {
 	availableParkingArea ParkingLots
+	listener             []Listener
 }
 
 func NewAttendant(parkingArea ...*ParkingArea) *Attendant {
-	attendant := &Attendant{make(ParkingLots)}
+	attendant := &Attendant{make(ParkingLots), make([]Listener, 0)}
 	attendant.addParkingLots(parkingArea...)
 	return attendant
+}
+
+func (a *Attendant) AddListener(listener Listener) {
+	a.listener = append(a.listener, listener)
 }
 
 func (a *Attendant) addParkingLots(parkingArea ...*ParkingArea) {

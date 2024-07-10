@@ -84,3 +84,24 @@ func TestParkingLotWithAttendant(t *testing.T) {
 
 	})
 }
+
+func TestMultipleAttendants(t *testing.T) {
+	t.Run("attendant should receive notification about full parking lots", func(t *testing.T) {
+		owner := &TestTestifyMockListener{}
+		attendantListener := &TestTestifyMockListener{}
+		parkingArea := parkinglot.NewParkingAreaWithListener(1, owner)
+		attendant := parkinglot.NewAttendant(parkingArea)
+		owner.On("FullSlots")
+		owner.On("SpaceAvailable")
+		attendantListener.On("FullSlots")
+		attendantListener.On("SpaceAvailable")
+		attendant.AddListener(attendantListener)
+		car := "UP-78-EB-1995"
+		_ = attendant.ParkIn(car)
+
+		_ = attendant.ParkOut(car)
+
+		owner.AssertCalled(t, "FullSlots")
+	})
+
+}

@@ -16,3 +16,15 @@ func (p *ParkingArea) notifySpaceAvailable() {
 		listener.SpaceAvailable()
 	}
 }
+
+func (a *Attendant) notifyFullSlots() {
+	for _, listener := range a.listener {
+		listener.FullSlots()
+	}
+}
+
+func (a *Attendant) notifySpaceAvailable() {
+	for _, listener := range a.listener {
+		listener.SpaceAvailable()
+	}
+}
